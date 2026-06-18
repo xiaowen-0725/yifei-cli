@@ -3,7 +3,7 @@ module github.com/xiaowen-0725/yifei-cli
 go 1.25.7
 
 require (
-	github.com/microsoft/go-mssqldb v1.9.8
+	github.com/microsoft/go-mssqldb v1.10.0
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
 	gopkg.in/yaml.v3 v3.0.1
