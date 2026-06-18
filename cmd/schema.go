@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/xiaowen-0725/yifei-cli/internal/dict"
 )
 
 func newSchemaCmd(deps Deps) *cobra.Command {
@@ -66,7 +67,11 @@ func newSchemaTableCmd(deps Deps) *cobra.Command {
 			out := c.OutOrStdout()
 			fmt.Fprintf(out, "表: %s  模块: %s  类型: %s  行数: %d\n",
 				strings.ToUpper(args[0]), tbl.Module, tbl.SuffixType, tbl.RowCount)
-			td, hasDict := deps.Dict.Table(args[0])
+			var hasDict bool
+			var td dict.TableDict
+			if deps.Dict != nil {
+				td, hasDict = deps.Dict.Table(args[0])
+			}
 			for _, col := range tbl.Columns {
 				cn := ""
 				if hasDict {

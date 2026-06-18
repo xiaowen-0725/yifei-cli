@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bytes"
-	"fmt"
 	"path/filepath"
 	"testing"
 
@@ -53,5 +52,4 @@ func TestQueryRunsAndAppliesDefaultLimit(t *testing.T) {
 	require.NoError(t, root.Execute())
 	require.Equal(t, 1000, fake.lastLimit)
 	require.Contains(t, out.String(), "11Z122")
-	_ = fmt.Sprint
 }
