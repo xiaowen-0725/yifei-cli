@@ -51,6 +51,7 @@ go test -tags integration ./internal/db/        # 需本地 YDSTEST 容器；默
 - npm 包只是个 **3.9kB 的下载器**：`scripts/postinstall.js` 按平台从 GitHub Release `v<package.json.version>` 拉对应**裸二进制**到 `binaries/`，`bin/yifei.js` 再 exec 它。
 - **资产命名必须固定**：`yifei-<os>-<arch>[.exe]`（os∈darwin/windows/linux，arch∈amd64/arm64）。改名就会断掉已发布版本的安装链路——`postinstall.js`、`release.yml`、Release 资产三处命名必须一致。
 - npm 默认 registry 可能指向 `registry.npmmirror.com`（不收 npmjs token）；发布须显式 `--registry https://registry.npmjs.org/`（CI 用 setup-node 的 registry-url 已处理）。
+- **`files` 必须白名单到具体文件**（`bin/yifei.js`、`scripts/postinstall.js`），**不能写 `bin/` 目录**——否则 `make build` 产出的 `bin/yifei`（21MB 平台二进制）会被一起 publish 进 npm 包（0.2.1 踩过，0.2.2 修复）。
 
 ## 发版（GitHub Actions 自动化）
 ```bash
