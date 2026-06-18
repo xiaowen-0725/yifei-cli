@@ -2,11 +2,21 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/xiaowen-0725/yifei-cli/internal/dict"
+	"github.com/xiaowen-0725/yifei-cli/internal/schema"
 )
 
-// Deps carries shared services injected from main. Grows as tasks add packages.
+// Querier is the interface satisfied by *db.DB.
+type Querier interface {
+	Query(sql string, limit int) ([]string, [][]any, error)
+	Close() error
+}
+
+// Deps carries shared services injected from main.
 type Deps struct {
-	// Schema, Dict, Config-loader, DB-opener added in later tasks.
+	Dict   *dict.Dict
+	Schema *schema.Schema
+	OpenDB func(dsn string) (Querier, error)
 }
 
 func NewRootCmd(deps Deps) *cobra.Command {
@@ -20,6 +30,7 @@ func NewRootCmd(deps Deps) *cobra.Command {
 	root.PersistentFlags().String("config", "", "配置文件路径 (默认: OS 配置目录/yifei-cli/config.yaml)")
 	root.PersistentFlags().Bool("quiet", false, "精简输出")
 	root.AddCommand(newConfigCmd())
+	root.AddCommand(newQueryCmd(deps))
 	return root
 }
 
