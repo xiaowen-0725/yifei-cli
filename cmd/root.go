@@ -19,6 +19,7 @@ func NewRootCmd(deps Deps) *cobra.Command {
 	root.PersistentFlags().String("format", "table", "输出格式: table|json|csv")
 	root.PersistentFlags().String("config", "", "配置文件路径 (默认: OS 配置目录/yifei-cli/config.yaml)")
 	root.PersistentFlags().Bool("quiet", false, "精简输出")
+	root.AddCommand(newConfigCmd())
 	return root
 }
 
