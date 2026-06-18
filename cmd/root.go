@@ -1,7 +1,10 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
+	"github.com/xiaowen-0725/yifei-cli/internal/build"
 	"github.com/xiaowen-0725/yifei-cli/internal/dict"
 	"github.com/xiaowen-0725/yifei-cli/internal/schema"
 )
@@ -34,6 +37,7 @@ func NewRootCmd(deps Deps) *cobra.Command {
 	root.AddCommand(newSchemaCmd(deps))
 	root.AddCommand(newDictCmd(deps))
 	root.AddCommand(newAnalyzeCmd(deps))
+	root.AddCommand(newVersionCmd())
 	return root
 }
 
@@ -45,4 +49,15 @@ func GlobalFormat(c *cobra.Command) string {
 func GlobalConfigPath(c *cobra.Command) string {
 	v, _ := c.Flags().GetString("config")
 	return v
+}
+
+func newVersionCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "version",
+		Short: "显示版本",
+		RunE: func(c *cobra.Command, _ []string) error {
+			fmt.Fprintf(c.OutOrStdout(), "yifei-cli %s (%s)\n", build.Version, build.Date)
+			return nil
+		},
+	}
 }
