@@ -32,6 +32,7 @@ func NewRootCmd(deps Deps) *cobra.Command {
 	root.AddCommand(newConfigCmd())
 	root.AddCommand(newQueryCmd(deps))
 	root.AddCommand(newSchemaCmd(deps))
+	root.AddCommand(newDictCmd(deps))
 	return root
 }
 
