@@ -1,6 +1,6 @@
 module github.com/xiaowen-0725/yifei-cli
 
-go 1.26.3
+go 1.23
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
