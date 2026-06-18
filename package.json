@@ -1,6 +1,6 @@
 {
   "name": "yifei-cli",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "易飞 ERP 只读数据分析 CLI (鼎捷 Digiwin) — read-only ERP data analysis for humans and AI agents",
   "bin": {
     "yifei": "bin/yifei.js"
