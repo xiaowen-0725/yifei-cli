@@ -1,0 +1,37 @@
+{
+  "name": "yifei-cli",
+  "version": "0.1.0",
+  "description": "易飞 ERP 只读数据分析 CLI (鼎捷 Digiwin) — read-only ERP data analysis for humans and AI agents",
+  "bin": {
+    "yifei": "bin/yifei.js"
+  },
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "files": [
+    "bin/",
+    "scripts/"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaowen-0725/yifei-cli.git"
+  },
+  "homepage": "https://github.com/xiaowen-0725/yifei-cli#readme",
+  "bugs": {
+    "url": "https://github.com/xiaowen-0725/yifei-cli/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "yifei",
+    "erp",
+    "digiwin",
+    "鼎捷易飞",
+    "sqlserver",
+    "cli",
+    "ai-agent",
+    "read-only"
+  ]
+}

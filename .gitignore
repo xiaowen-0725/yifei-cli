@@ -1,3 +1,10 @@
-bin/
+# Go build output (Makefile builds to ./bin via -o bin/yifei)
+/bin/yifei
+/bin/yifei.exe
 *.exe
 .DS_Store
+# npm postinstall download target
+binaries/
+node_modules/
+# npm auth (never commit)
+.npmrc
