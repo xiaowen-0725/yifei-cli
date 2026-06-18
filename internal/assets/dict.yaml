@@ -1,3 +1,119 @@
-tables: {}
-codes: {}
-relations: {}
+tables:
+  INVMB:
+    name: 品号基本资料主档
+    fields:
+      MB001: {name: 品号, note: 主键,产品编号}
+      MB002: {name: 品名}
+      MB003: {name: 规格}
+      MB004: {name: 库存单位}
+      MB005: {name: 物料分类码}
+      MB012: {name: 品号属性, note: 成品/半成品/原料}
+  COPMA:
+    name: 客户基本资料主档
+    fields:
+      MA001: {name: 客户代号, note: 主键}
+      MA002: {name: 客户简称}
+      MA003: {name: 客户全称}
+      MA008: {name: 负责业务员}
+  PURMA:
+    name: 供应商基本资料主档
+    fields:
+      MA001: {name: 供应商代号, note: 主键}
+      MA002: {name: 供应商简称}
+      MA003: {name: 供应商全称}
+  COPTC:
+    name: 销售订单单头
+    fields:
+      TC001: {name: 单别}
+      TC002: {name: 单号}
+      TC003: {name: 订单日期, note: YYYYMMDD}
+      TC004: {name: 客户代号, note: 关联 COPMA.MA001}
+      TC008: {name: 币别}
+  COPTD:
+    name: 销售订单单身
+    fields:
+      TD001: {name: 单别, note: 关联 COPTC.TC001}
+      TD002: {name: 单号, note: 关联 COPTC.TC002}
+      TD003: {name: 序号}
+      TD004: {name: 品号, note: 关联 INVMB.MB001}
+      TD005: {name: 品名}
+  MOCTA:
+    name: 工单单头
+    fields:
+      TA001: {name: 单别}
+      TA002: {name: 单号}
+      TA003: {name: 开工日期, note: YYYYMMDD}
+      TA004: {name: 预完工日期, note: YYYYMMDD}
+      TA006: {name: 制造品号, note: 关联 INVMB.MB001}
+  MOCTB:
+    name: 工单单身/用料明细
+    fields:
+      TB001: {name: 单别, note: 关联 MOCTA.TA001}
+      TB002: {name: 单号, note: 关联 MOCTA.TA002}
+      TB003: {name: 物料品号, note: 关联 INVMB.MB001}
+      TB004: {name: 需求数量}
+  PURTA:
+    name: 采购订单单头
+    fields:
+      TA001: {name: 单别}
+      TA002: {name: 单号}
+      TA003: {name: 采购日期, note: YYYYMMDD}
+      TA004: {name: 供应商代号, note: 关联 PURMA.MA001}
+  PURTB:
+    name: 采购订单单身
+    fields:
+      TB001: {name: 单别, note: 关联 PURTA.TA001}
+      TB002: {name: 单号, note: 关联 PURTA.TA002}
+      TB004: {name: 品号, note: 关联 INVMB.MB001}
+  INVLA:
+    name: 库存异动记录
+    fields:
+      LA001: {name: 品号, note: 关联 INVMB.MB001}
+      LA004: {name: 异动日期, note: YYYYMMDD}
+      LA005: {name: 异动类型, note: 1=入库 -1=出库}
+      LA006: {name: 来源单别}
+      LA007: {name: 来源单号}
+  BOMCA:
+    name: BOM 表头
+    fields:
+      CA001: {name: 单别}
+      CA002: {name: 单号}
+      CA003: {name: 母件品号, note: 关联 INVMB.MB001}
+  BOMCB:
+    name: BOM 明细
+    fields:
+      CB001: {name: 母件品号}
+      CB004: {name: 项次}
+      CB005: {name: 子件品号, note: 关联 INVMB.MB001}
+codes:
+  COPTC.单别:
+    "221": 销售订单
+    "225": 主要销售订单类型
+    "251": 另一类销售单
+  PURTA.单别:
+    "311": 标准采购订单
+    "313": 另一类采购单
+  MOCTA.单别:
+    "510": 正常工单
+    "519": 其他工单
+  仓库:
+    "102": 自拍器成品仓
+    "103": 散热器成品仓
+    "203": 外购件仓
+    "210": 原料仓
+  部门:
+    "101": 总经办
+    "201": 经营部
+    "301": 研发部
+relations:
+  COPTD:
+    - "COPTC.TC001+TC002 ↔ COPTD.TD001+TD002 (头身关联)"
+    - "TD004 → INVMB.MB001 (品号)"
+  COPTC:
+    - "TC004 → COPMA.MA001 (客户)"
+  MOCTB:
+    - "MOCTA.TA001+TA002 ↔ MOCTB.TB001+TB002 (头身关联)"
+    - "TB003 → INVMB.MB001 (物料品号)"
+  PURTB:
+    - "PURTA.TA001+TA002 ↔ PURTB.TB001+TB002 (头身关联)"
+    - "TB004 → INVMB.MB001 (品号)"
