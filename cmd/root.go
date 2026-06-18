@@ -31,6 +31,7 @@ func NewRootCmd(deps Deps) *cobra.Command {
 	root.PersistentFlags().Bool("quiet", false, "精简输出")
 	root.AddCommand(newConfigCmd())
 	root.AddCommand(newQueryCmd(deps))
+	root.AddCommand(newSchemaCmd(deps))
 	return root
 }
 
