@@ -43,3 +43,18 @@ func TestCodesAndRelations(t *testing.T) {
 	require.True(t, ok)
 	require.Len(t, rels, 1)
 }
+
+func TestSearchTables(t *testing.T) {
+	d, err := New([]byte(sample))
+	require.NoError(t, err)
+	// matches field name 客户代号
+	require.Equal(t, []string{"COPTC"}, d.SearchTables("客户"))
+	// matches table Chinese name 销售订单单头
+	require.Equal(t, []string{"COPTC"}, d.SearchTables("销售订单"))
+	// matches field note (关联 COPMA...)
+	require.Equal(t, []string{"COPTC"}, d.SearchTables("COPMA"))
+	// no match
+	require.Empty(t, d.SearchTables("不存在的词"))
+	// empty keyword -> nil
+	require.Empty(t, d.SearchTables("  "))
+}

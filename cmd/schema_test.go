@@ -37,3 +37,13 @@ func TestSchemaSearch(t *testing.T) {
 	require.NoError(t, root.Execute())
 	require.Contains(t, out.String(), "COPTC")
 }
+
+func TestSchemaSearchByChineseName(t *testing.T) {
+	root := NewRootCmd(schemaDeps())
+	var out bytes.Buffer
+	root.SetOut(&out)
+	root.SetArgs([]string{"schema", "search", "客户"})
+	require.NoError(t, root.Execute())
+	require.Contains(t, out.String(), "COPTC")        // found via dict field 客户代号
+	require.Contains(t, out.String(), "销售订单单头")  // annotated with Chinese name
+}

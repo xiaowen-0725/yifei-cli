@@ -85,3 +85,34 @@ func (d *Dict) LookupRelations(table string) ([]string, bool) {
 	r, ok := d.Relations[strings.ToUpper(table)]
 	return r, ok
 }
+
+// SearchTables returns table codes whose Chinese name, field names, or field
+// notes contain keyword (case-insensitive). Only dict-annotated tables match —
+// it complements schema.SearchTables (which matches table codes / suffix types).
+func (d *Dict) SearchTables(keyword string) []string {
+	kw := strings.ToUpper(strings.TrimSpace(keyword))
+	if kw == "" {
+		return nil
+	}
+	var out []string
+	for code, td := range d.Tables {
+		if tableMatches(td, kw) {
+			out = append(out, code)
+		}
+	}
+	sort.Strings(out)
+	return out
+}
+
+func tableMatches(td TableDict, kw string) bool {
+	if strings.Contains(strings.ToUpper(td.Name), kw) {
+		return true
+	}
+	for _, f := range td.Fields {
+		if strings.Contains(strings.ToUpper(f.Name), kw) ||
+			strings.Contains(strings.ToUpper(f.Note), kw) {
+			return true
+		}
+	}
+	return false
+}

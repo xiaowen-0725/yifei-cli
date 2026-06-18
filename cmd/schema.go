@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -38,16 +39,40 @@ func newSchemaTablesCmd(deps Deps) *cobra.Command {
 func newSchemaSearchCmd(deps Deps) *cobra.Command {
 	return &cobra.Command{
 		Use:   "search <关键词>",
-		Short: "按表名/类型搜表",
+		Short: "按表名/类型/中文名搜表",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
-			hits := deps.Schema.SearchTables(args[0])
+			seen := map[string]bool{}
+			var hits []string
+			add := func(codes []string) {
+				for _, t := range codes {
+					if !seen[t] {
+						seen[t] = true
+						hits = append(hits, t)
+					}
+				}
+			}
+			add(deps.Schema.SearchTables(args[0])) // 表名 / 后缀类型
+			if deps.Dict != nil {
+				add(deps.Dict.SearchTables(args[0])) // 中文名 / 字段名 / 备注
+			}
 			if len(hits) == 0 {
 				fmt.Fprintln(c.OutOrStdout(), "无匹配")
 				return nil
 			}
+			sort.Strings(hits)
 			for _, t := range hits {
-				fmt.Fprintln(c.OutOrStdout(), t)
+				cname := ""
+				if deps.Dict != nil {
+					if td, ok := deps.Dict.Table(t); ok {
+						cname = td.Name
+					}
+				}
+				if cname != "" {
+					fmt.Fprintf(c.OutOrStdout(), "%-10s %s\n", t, cname)
+				} else {
+					fmt.Fprintln(c.OutOrStdout(), t)
+				}
 			}
 			return nil
 		},
