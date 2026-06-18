@@ -1,0 +1,30 @@
+# 常用查询范式
+
+## 头身关联(单别+单号)
+```sql
+SELECT h.TC002 AS 单号, h.TC004 AS 客户, d.TD004 AS 品号, d.TD005 AS 品名
+FROM COPTC h
+JOIN COPTD d ON h.TC001 = d.TD001 AND h.TC002 = d.TD002
+WHERE h.TC002 = '20200210004';
+```
+
+## 订单关联客户名
+```sql
+SELECT h.TC002, c.MA002 AS 客户简称
+FROM COPTC h LEFT JOIN COPMA c ON h.TC004 = c.MA001;
+```
+
+## 工单用料关联品号
+```sql
+SELECT b.TB003 AS 物料品号, m.MB002 AS 品名, b.TB004 AS 需求数量
+FROM MOCTB b LEFT JOIN INVMB m ON b.TB003 = m.MB001
+WHERE b.TB001 = '510' AND b.TB002 = '20200213005';
+```
+
+## 库存进出净额
+```sql
+SELECT LA001 AS 品号,
+       SUM(CASE WHEN LA005 = 1 THEN 1 ELSE 0 END) AS 入库次数,
+       SUM(CASE WHEN LA005 = -1 THEN 1 ELSE 0 END) AS 出库次数
+FROM INVLA GROUP BY LA001;
+```
