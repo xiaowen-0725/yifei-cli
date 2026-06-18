@@ -10,8 +10,12 @@ import { parseFrontmatter, listTopics, recall } from './recall.mjs';
 
 const SCRIPT = fileURLToPath(new URL('./recall.mjs', import.meta.url));
 
+const _tmpDirs = [];
+process.on('exit', () => { for (const d of _tmpDirs) { try { fs.rmSync(d, { recursive: true, force: true }); } catch {} } });
+
 function tmpMemory(files) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'yfmem-'));
+  _tmpDirs.push(dir);
   for (const [name, content] of Object.entries(files)) {
     fs.writeFileSync(path.join(dir, name), content);
   }
@@ -87,4 +91,10 @@ test('CLI exits 0 when memory dir does not exist', () => {
   const env = { ...process.env, YIFEI_MEMORY_DIR: path.join(os.tmpdir(), 'definitely-missing-yfmem') };
   const out = execFileSync('node', [SCRIPT, 'COPTC'], { env, encoding: 'utf8' });
   assert.equal(out.trim(), '');
+});
+
+test('parseFrontmatter strips quotes around alias values', () => {
+  const raw = `---\naliases: ['COPTC', "销售订单"]\n---\n\n## 单别含义\n- x\n`;
+  const { aliases } = parseFrontmatter(raw);
+  assert.deepEqual(aliases, ['COPTC', '销售订单']);
 });

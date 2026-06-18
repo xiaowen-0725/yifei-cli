@@ -31,7 +31,7 @@ export function parseFrontmatter(raw) {
     .replace(/^\[/, '')
     .replace(/\]$/, '')
     .split(',')
-    .map((s) => s.trim())
+    .map((s) => s.trim().replace(/^['"]|['"]$/g, ''))
     .filter(Boolean);
   return { aliases, body };
 }

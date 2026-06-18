@@ -65,5 +65,5 @@ git push --follow-tags     # 推 tag -> .github/workflows/release.yml 自动：
 ## 扩展指引
 - **加 analyze 模板**：在 `internal/analyze/templates.go` 的 `templates` 切片加一项即可——`cmd/analyze.go` 自动按 `All()` 生成子命令。只用字典已确认的列；给纯函数 SQL builder 写测试。
 - **补字典**：`internal/assets/dict.yaml`（首批覆盖核心表，其余字段保留原编号）；schema.json 是只读快照，更新需重新 build（`make sync-data` 从 ../yifei-erp-docs 同步）。
-- **经验记忆**:Agent 跨 session 复用的已验证 ERP 经验存 `~/.config/yifei-cli/memory/*.md`（私有，不进 git），由 skill 的 `scripts/recall.mjs` 召回、Agent 按 `skills/yifei/references/experience-format.md` 格式读写。详见 SKILL.md「经验记忆」章节。
+- **经验记忆**:Agent 跨 session 复用的已验证 ERP 经验存 `~/.config/yifei-cli/memory/*.md`（私有，不进 git），由 skill 的 `skills/yifei/scripts/recall.mjs` 召回、Agent 按 `skills/yifei/references/experience-format.md` 格式读写。详见 SKILL.md「经验记忆」章节。
 - 设计/计划文档在 `../yifei-erp-docs/docs/superpowers/`（spec + 14 任务 plan）。
